@@ -170,7 +170,7 @@
         radius: featureProperties.radius || attributeProperties.radius || 5,
         color: featureProperties.color || attributeProperties.color || '#3E87E8', // primary-blue,
         fillColor: featureProperties.fillColor || attributeProperties.fillColor || '#88BDE6', // $dv-light-blue
-        weight: featureProperties.weight || attributeProperties.weight || 2,
+        weight: featureProperties.weight || attributeProperties.weight || 4,
         opacity: featureProperties.opacity || attributeProperties.opacity || 1,
         fillOpacity: featureProperties.fillOpacity || attributeProperties.fillOpacity || 0.4,
       };
@@ -272,18 +272,18 @@
       objectToAppendHighlight = JSON.parse(JSON.stringify(featureObject));
 
       objectToAppendWeight.properties.style = {
-        weight: 5,
+        weight: 4,
         opacity: 0.7,
         color: currentRouteColor,
       };
 
       objectToAppendHighlight.properties.style = {
-        weight: 5,
+        weight: 4,
         color: 'rgba(0, 0, 0, 0.5)',
       };
 
       objectToAppendColor.properties.style = {
-        weight: 1,
+        weight: 2,
         opacity: 1,
         color: 'white',
       };
@@ -359,6 +359,30 @@
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
       }
+
+      var clickBounds = L.latLngBounds(evt.latlng, evt.latlng);
+      console.log(clickBounds);
+      var intersectingRoutes = [];
+
+      var layers = this.elementInst.getLayers();
+      var layersArr = [];
+      var boudsArr = [];
+      layers.forEach(tl => {
+        boudsArr.push(tl.getBounds().pad(0.6));
+      });
+      console.log("Bounds array");
+      console.log(boudsArr);
+      layers.forEach(l => {
+        console.log("debug");
+        if (clickBounds.intersects(l.getBounds())) {
+          intersectingRoutes.push(l.feature.id);
+        }
+        layersArr.push(l.getBounds());
+      });
+
+      console.log("intersecting routes");
+      console.log("Bounds array", boudsArr);
+
       const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
       this.set('showFeatureProperties', 'true');
       this.set('data', JSON.parse(JSON.stringify(geoData)));
