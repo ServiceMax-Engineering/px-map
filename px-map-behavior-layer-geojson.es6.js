@@ -150,7 +150,7 @@
         },
 
         onEachFeature: (feature, layer) => {
-          if (!this.showFeatureProperties) return;
+          if (!this.showFeatureProperties || this._hasIntersectingRoutes) return;
           this._bindPopup(feature, layer);
         },
 
@@ -181,8 +181,38 @@
     },
 
     _bindPopup(feature, layer) {
-      const customPopup = feature.customPopup;
+      // customPopup intercepted by the component for intersecting routes
+      // this can't be configured geoJson configuration
+      if(this._hasIntersectingRoutes) {
+        const routeContent = this.intersectingRoutes.map((route) => {
+          const coords = route.geometry.coordinates;
+          // get route start and end point
+          const routeStart = L.latLng(coords[0]);
+          const routeEnd = coords[coords.length - 1];
+          // Returns distance (in meters) to miles * 0.000621371
+          const routeMiles = routeStart.distanceTo(routeEnd) * 0.000621371;
 
+          // TODO: Make this configurable content, from prop?
+          // TODO: Dipslay the routeStart and routeEnd custom marker in-lieu of route.id?
+          // Next Jira Ticket: Clicking on each of these intersecting route will bring up intersectingCustomPopup content
+          return `<span class='intersecting-route-popup'><a href="#">${route.id}: <strong>${routeMiles.toFixed(2)} Miles</a></strong></span>`;
+        });
+        const intersectingRoutePopup = {
+          "content": routeContent,
+          "margin": "10px",
+          "maxWidth": 400,
+          "minWidth": 100
+        };
+        const popup = new PxMap.InfoPopup(JSON.parse(JSON.stringify(intersectingRoutePopup)));
+          setTimeout(() => {
+            layer.bindPopup(popup).openPopup();
+            this._isHandleFeatureTapped = false;
+          }, 0);
+      };
+      if(this._hasIntersectingRoutes) return;
+
+      // customPopup configured from geoJson
+      const customPopup = feature.customPopup;
       if (customPopup) {
         const popup = new PxMap.InfoPopup(JSON.parse(JSON.stringify(customPopup)));
         if(this._isHandleFeatureTapped) {
@@ -373,6 +403,44 @@
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
       }
+
+      /*
+        Calculating the circular bounds, just drawing an area on the map
+        Start with an arbitrary number that defines user click and to find the routes intersect
+      */
+      var intersectionRadius = 25; // make this an option?
+      var radius = (19 - evt.target._map.getZoom()) * intersectionRadius;
+      var circularBounds = evt.latlng.toBounds(radius);
+      this.intersectingRoutes = [];
+      var layers = this.elementInst.getLayers();
+      var uniqueLayers = [];
+      /*
+        When a pop up is added to the elemtInst, it adds another layer to the map,
+        and when get Bounds is calculated it throws an error
+        so iterating over the layer object which are in uniqueLayerObj
+      */
+      var uniqueLayerObj = {};
+      layers.forEach(l => {
+        if (l.feature) {
+          if (!uniqueLayerObj[l.feature.id]) {
+            uniqueLayerObj[l.feature.id] = l.feature.id;
+            uniqueLayers.push(l);
+          }
+        }
+      });
+
+      // check and prepare intersecting routes any
+      uniqueLayers.forEach(l => {
+        if (circularBounds.intersects(l.getBounds())) {
+          if (l.feature) {
+            this.intersectingRoutes.push(l.feature);
+          }
+        }
+      });
+
+      // need it so, can handle customPopup for intersecting routes
+      this._hasIntersectingRoutes = this.intersectingRoutes.length > 1 ? true : false;
+
       const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
       this.set('data', JSON.parse(JSON.stringify(geoData)));
 

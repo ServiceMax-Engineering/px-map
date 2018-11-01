@@ -1,0 +1,187 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Map Demo -- Layer GeoJSON Custom Popup</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../polymer/polymer.html" />
+
+  <!-- Importing px-map subcomponents... -->
+  <link rel="import" href="../px-map.html" />
+  <link rel="import" href="../px-map-tile-layer.html" />
+  <link rel="import" href="../px-map-marker-custom.html" />
+  <link rel="import" href="../px-map-layer-geojson.html" />
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .wrap {
+      display: flex;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="wrap">
+    <dom-bind>
+      <template is="dom-bind">
+        <px-map flex-to-size>
+          <px-map-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></px-map-tile-layer>
+          <px-map-layer-geojson id="pxLayerGeoJson" data="{{geoJSONLine}}" feature-style='{"color": "purple", "fillColor": "purple", "fillOpacity": "0.3"}'
+            show-feature-properties>
+          </px-map-layer-geojson>
+          <px-map-marker-custom lat="37.389933" lng="-121.971807" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="1"></px-map-marker-custom>
+          <px-map-marker-custom lat="37.596371" lng="-122.081633" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="2" /></px-map-marker-custom>
+          <px-map-marker-custom lat="37.336182" lng="-121.890603" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="3" /></px-map-marker-custom>
+
+          <px-map-marker-custom lat="37.54348845864999" lng="-122.32177734375" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="4" /></px-map-marker-custom>
+          <px-map-marker-custom lat="37.46014336804266" lng="-122.27714538574219" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="5" /></px-map-marker-custom>
+        </px-map>
+      </template>
+    </dom-bind>
+  </section>
+</body>
+
+</html>
+
+<script>
+  var tmplQuery = Polymer.Element ? 'dom-bind' : 'template[is=dom-bind]';
+  var tmpl = document.querySelector(tmplQuery);
+
+  document.addEventListener('WebComponentsReady', function () {
+    const geoJSONLine = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "id": "8e4924de-e219-4af5-ae9d-205a838979f4",
+        "properties": {
+          "style": {
+            "color": "purple"
+          }
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [-121.971807, 37.389933],
+            [-121.961344, 37.387671],
+            [-121.964918, 37.381291],
+            [-121.91568, 37.371364],
+            [-121.901108, 37.363219],
+            [-121.923508, 37.457621],
+            [-121.934605, 37.480579],
+            [-121.983328, 37.520262],
+            [-122.015984, 37.537906],
+            [-122.028537, 37.554297],
+            [-122.04439, 37.569508],
+            [-122.059194, 37.598362],
+            [-122.081633, 37.596371]
+          ]
+        },
+        "customPopup": {
+          "content": "<span style=\"display: block;text-align: center; font-size: 13px;\">Purple Route</span>",
+          "margin": "10px",
+          "maxWidth": 400,
+          "minWidth": 100
+        }
+      }, {
+        "type": "Feature",
+        "id": "d0deb0eb-6a3c-4283-87f1-4893c50be2bd",
+        "properties": {
+          "style": {
+            "color": "blue"
+          }
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [-122.081633, 37.596371],
+            [-122.083823, 37.597931],
+            [-122.081892, 37.59636],
+            [-122.060433, 37.59729],
+            [-122.050444, 37.583664],
+            [-122.044592, 37.569404],
+            [-122.028741, 37.554197],
+            [-122.01571, 37.537372],
+            [-121.983278, 37.519959],
+            [-121.935852, 37.48221],
+            [-121.923752, 37.457552],
+            [-121.91879, 37.430528],
+            [-121.910704, 37.408304],
+            [-121.901349, 37.36864],
+            [-121.903292, 37.363693],
+            [-121.873373, 37.359517],
+            [-121.854129, 37.340336],
+            [-121.868953, 37.329432],
+            [-121.887846, 37.325002],
+            [-121.892138, 37.325552],
+            [-121.895916, 37.330552],
+            [-121.896584, 37.333333],
+            [-121.890603, 37.336182]
+          ]
+        },
+        "customPopup": {
+          "content": "<span style=\"display: block;text-align: center; font-size: 13px;\">Custom popup content <strong>configured from GeoJson</strong>.</span>",
+          "margin": "10px",
+          "maxWidth": 400,
+          "minWidth": 100
+        }
+      },
+      {
+        "type": "Feature",
+        "id": "d0deb0eb-6a3c-4283-87f1-4893c50be2be",
+        "properties": {
+          "Drive Time": "15 minutes",
+          "Mileage": "7.36 miles",
+          "style": {
+            "color": "green"
+          }
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -122.32177734375,
+              37.54348845864999
+            ],
+            [
+              -122.26684570312499,
+              37.53314347453068
+            ],
+            [
+              -122.25242614746092,
+              37.50373410549169
+            ],
+            [
+              -122.27714538574219,
+              37.46014336804266
+            ]
+          ]
+        }
+      },
+      ]
+    };
+
+    tmpl.geoJSONLine = geoJSONLine;
+
+  });
+</script>

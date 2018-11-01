@@ -211,6 +211,16 @@ $px-map-marker-locate-icon-accuracy-opacity:        var(--px-map-marker-locate-i
   }
 }
 
+.intersecting-route-popup {
+  display: block;
+  font-size: 13px;
+  text-align: center;
+
+  a {
+    text-decoration: none;
+  }
+}
+
 /*******************************************************************************
  * CONTROLS
  ******************************************************************************/
