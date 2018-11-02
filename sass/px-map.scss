@@ -216,8 +216,20 @@ $px-map-marker-locate-icon-accuracy-opacity:        var(--px-map-marker-locate-i
   font-size: 13px;
   text-align: center;
 
-  a {
-    text-decoration: none;
+  section {
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style-type: none;
+
+        a {
+          text-decoration: none;
+        }
+      }
+    }
   }
 }
 

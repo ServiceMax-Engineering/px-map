@@ -48,7 +48,7 @@ limitations under the License.
         <px-map flex-to-size>
           <px-map-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></px-map-tile-layer>
           <px-map-layer-geojson id="pxLayerGeoJson" data="{{geoJSONLine}}" feature-style='{"color": "purple", "fillColor": "purple", "fillOpacity": "0.3"}'
-            show-feature-properties>
+            show-feature-properties intersecting-route-popup="<section><ul><li><a href='#'>3-4: 12 mi, 0:33min</a></li><li><a href='#'>4-5: 34 mi, 1:33min</a></li></ul></section>">
           </px-map-layer-geojson>
           <px-map-marker-custom lat="37.389933" lng="-121.971807" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="1"></px-map-marker-custom>
           <px-map-marker-custom lat="37.596371" lng="-122.081633" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="2" /></px-map-marker-custom>

@@ -95,6 +95,17 @@
         value: false,
         observer: 'shouldUpdateInst',
       },
+
+      /**
+       * A String of type HTML blob gets rendered in a popup when the
+       * user taps that feature intersecting routes.
+       *
+       * @type {String}
+       */
+      intersectingRoutePopup: {
+        type: String,
+        observer: 'shouldUpdateInst',
+      },
     },
 
     /**
@@ -189,16 +200,15 @@
           // get route start and end point
           const routeStart = L.latLng(coords[0]);
           const routeEnd = coords[coords.length - 1];
-          // Returns distance (in meters) to miles * 0.000621371
+          // returns distance (in meters) so to miles * 0.000621371
           const routeMiles = routeStart.distanceTo(routeEnd) * 0.000621371;
 
-          // TODO: Make this configurable content, from prop?
-          // TODO: Dipslay the routeStart and routeEnd custom marker in-lieu of route.id?
-          // Next Jira Ticket: Clicking on each of these intersecting route will bring up intersectingCustomPopup content
+          // TODO: Next Jira Ticket: Clicking on each of these intersecting route will bring up intersectingCustomPopup content
           return `<span class='intersecting-route-popup'><a href="#">${route.id}: <strong>${routeMiles.toFixed(2)} Miles</a></strong></span>`;
         });
         const intersectingRoutePopup = {
-          "content": routeContent,
+          // fallback to component generated content
+          "content": `<span class='intersecting-route-popup'>${this.intersectingRoutePopup ? this.intersectingRoutePopup : routeContent}</span>`,
           "margin": "10px",
           "maxWidth": 400,
           "minWidth": 100
@@ -296,6 +306,7 @@
         featureStyle: this.featureStyle || {},
         featureStyleHash: JSON.stringify(this.featureStyle || {}),
         showFeatureProperties: this.showFeatureProperties,
+        intersectingRoutePopup: this.intersectingRoutePopup,
       };
     },
 
