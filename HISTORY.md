@@ -1,3 +1,8 @@
+v3.19.1
+===================
+## Enhancement:
+*  Reduce the padding value in `map-icon-symbol`.
+
 v3.19.0
 ===================
 ## Enhancement:
